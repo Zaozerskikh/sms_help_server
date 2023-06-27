@@ -1,16 +1,18 @@
 package com.sms_help_server.services.user_service;
 
-import com.sms_help_server.entities.base.Status;
+import com.sms_help_server.entities.base.EntityStatus;
 import com.sms_help_server.entities.role.RoleName;
 import com.sms_help_server.entities.user.SmsHelpUser;
 import com.sms_help_server.repo.RoleRepository;
 import com.sms_help_server.repo.UserRepository;
+import com.sms_help_server.security.exceptions.RegistrationException;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,10 +30,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public SmsHelpUser register(SmsHelpUser user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(List.of(roleRepository.findByName(RoleName.ROLE_USER).orElseThrow()));
-        user.setStatus(Status.ACTIVE);
-        return userRepository.save(user);
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(List.of(roleRepository.findByName(RoleName.ROLE_USER).orElseThrow()));
+            user.setEntityStatus(EntityStatus.ACTIVE);
+            return userRepository.save(user);
+        } catch (Exception e) {
+            throw new RegistrationException("Registration failed, contact support. Stack trace\n" + Arrays.toString(e.getStackTrace()));
+        }
     }
 
     @Override

@@ -4,29 +4,36 @@ import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.user.SmsHelpUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
-@Entity(name = "transaction")
+@NoArgsConstructor
+@MappedSuperclass
 @EqualsAndHashCode(callSuper = true)
 public class Transaction extends BaseEntity {
-    @Id
-    @Column(name = "transaction_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long transactionId;
-
-    @Column(name = "type")
-    @Enumerated(EnumType.STRING)
-    private TransactionType type;
-
     @Column(name = "description")
     private String descriptiton;
 
     @Column(name = "amount")
     private Double amount;
 
+    @Column(name = "transaction_status")
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus transactionStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private SmsHelpUser user;
+
+    public Transaction(Double amount, String descriptiton) {
+        this.amount = amount;
+        this.descriptiton = descriptiton;
+    }
+
+    public Transaction(Double amount) {
+        this.amount = amount;
+        this.descriptiton = "no description provided";
+    }
 }

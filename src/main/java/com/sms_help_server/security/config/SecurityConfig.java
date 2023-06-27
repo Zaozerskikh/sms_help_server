@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final String USER_ENDPOINTS = "/api/v1/user/{userId}/**";
     private static final String ANDMIN_ENDPOINTS = "/api/v1/admin/**";
     private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
     private static final String REGISTER_ENDPOINT = "/api/v1/auth/register";
@@ -37,16 +38,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    // intellij idea cant recognize variable names in Spring EL expressions and throws warnings,
+    // but all works fine.
+    @SuppressWarnings("all")
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .httpBasic().disable()
+                .httpBasic()
+                .disable()
                 .csrf()
                 .disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers(LOGIN_ENDPOINT, REGISTER_ENDPOINT).permitAll()
-                .antMatchers(ANDMIN_ENDPOINTS).hasAnyRole(RoleName.ROLE_ADMIN.getValue())
+                .antMatchers(ANDMIN_ENDPOINTS).hasRole(RoleName.ROLE_ADMIN.getValue())
+                .antMatchers(USER_ENDPOINTS)
+                    .access(("hasRole('" + RoleName.ROLE_ADMIN.getValue() + "') or @userSecurity.validateUserId(authentication, #userId)"))
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

@@ -1,8 +1,10 @@
 package com.sms_help_server.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.role.Role;
-import com.sms_help_server.entities.transaction.Transaction;
+import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
+import com.sms_help_server.entities.transaction.top_up.TopUp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,8 +32,9 @@ public class SmsHelpUser extends BaseEntity {
     private String password;
 
     @Column(name = "balance")
-    private double balance;
+    private double balance = 0;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
@@ -39,8 +42,21 @@ public class SmsHelpUser extends BaseEntity {
     )
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactions;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<NumberPurchase> numberPurchases;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<TopUp> topUps;
 
     public SmsHelpUser(String username, String email, String password) {
         this.nickname = username;
