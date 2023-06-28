@@ -1,5 +1,6 @@
 package com.sms_help_server.entities.transaction;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.user.SmsHelpUser;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Transaction extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TransactionStatus transactionStatus;
 
+    @JsonIgnoreProperties({"topUps", "numberPurchases"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private SmsHelpUser user;

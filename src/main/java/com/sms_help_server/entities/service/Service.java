@@ -1,5 +1,6 @@
 package com.sms_help_server.entities.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.phone_number.PhoneNumber;
 import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
@@ -33,6 +34,7 @@ public class Service extends BaseEntity {
     )
     private List<PhoneNumber> availableNumbers;
 
+    @JsonIgnoreProperties
     @OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
     private List<NumberPurchase> numberPurchases;
 

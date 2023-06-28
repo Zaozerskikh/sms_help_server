@@ -1,8 +1,8 @@
 package com.sms_help_server.entities.phone_number;
 
 import com.sms_help_server.entities.base.BaseEntity;
+import com.sms_help_server.entities.rent_fact.RentFact;
 import com.sms_help_server.entities.service.Service;
-import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,7 +30,7 @@ public class PhoneNumber extends BaseEntity {
     private List<Service> availableServices;
 
     @OneToMany(mappedBy = "number", fetch = FetchType.LAZY)
-    private List<NumberPurchase> numberPurchases;
+    private List<RentFact> rentFacts;
 
     public PhoneNumber(String number, String country) {
         this.number = number;

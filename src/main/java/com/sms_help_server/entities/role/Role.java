@@ -1,5 +1,6 @@
 package com.sms_help_server.entities.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.user.SmsHelpUser;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Role extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
+    @JsonIgnoreProperties("roles")
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<SmsHelpUser> users;
 

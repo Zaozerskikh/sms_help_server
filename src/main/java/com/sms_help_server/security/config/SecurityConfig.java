@@ -53,7 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(LOGIN_ENDPOINT, REGISTER_ENDPOINT).permitAll()
                 .antMatchers(ANDMIN_ENDPOINTS).hasRole(RoleName.ROLE_ADMIN.getValue())
                 .antMatchers(USER_ENDPOINTS)
-                    .access(("hasRole('" + RoleName.ROLE_ADMIN.getValue() + "') or @userSecurity.validateUserId(authentication, #userId)"))
+                    .access(
+                            "hasRole('" + RoleName.ROLE_ADMIN.getValue() + "') " +
+                            "or @userSecurity.validateUserId(authentication, #userId)"
+                    )
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

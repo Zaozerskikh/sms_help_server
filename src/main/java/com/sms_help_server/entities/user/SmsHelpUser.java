@@ -1,6 +1,7 @@
 package com.sms_help_server.entities.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.role.Role;
 import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
@@ -25,16 +26,17 @@ public class SmsHelpUser extends BaseEntity {
     @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     @Column(name = "balance")
     private double balance = 0;
 
-    @JsonIgnore
+    @JsonIgnoreProperties("users")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
@@ -42,7 +44,7 @@ public class SmsHelpUser extends BaseEntity {
     )
     private List<Role> roles;
 
-    @JsonIgnore
+    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
@@ -50,7 +52,7 @@ public class SmsHelpUser extends BaseEntity {
     )
     private List<NumberPurchase> numberPurchases;
 
-    @JsonIgnore
+    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,

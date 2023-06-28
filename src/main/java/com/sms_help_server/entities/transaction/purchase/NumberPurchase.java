@@ -1,6 +1,7 @@
 package com.sms_help_server.entities.transaction.purchase;
 
-import com.sms_help_server.entities.phone_number.PhoneNumber;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sms_help_server.entities.rent_fact.RentFact;
 import com.sms_help_server.entities.service.Service;
 import com.sms_help_server.entities.transaction.Transaction;
 import lombok.Data;
@@ -15,27 +16,15 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 public class NumberPurchase extends Transaction {
     @Id
-    @Column(name = "purchase_id")
+    @Column(name = "number_purchase_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long purchaseId;
+    protected Long numberPurchaseId;
 
-    @ManyToOne
+    @JsonIgnoreProperties("numberPurchases")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id")
     private Service service;
 
-    @ManyToOne
-    @JoinColumn(name = "number_id")
-    private PhoneNumber number;
-
-    public NumberPurchase(Double amount, String descriptiton, Service service, PhoneNumber number) {
-        super(amount, descriptiton);
-        this.service = service;
-        this.number = number;
-    }
-
-    public NumberPurchase(Double amount, Service service, PhoneNumber number) {
-        super(amount);
-        this.service = service;
-        this.number = number;
-    }
+    @OneToOne(mappedBy = "numberPurchase", fetch = FetchType.LAZY)
+    private RentFact rentFact;
 }

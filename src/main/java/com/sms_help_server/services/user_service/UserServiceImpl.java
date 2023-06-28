@@ -56,6 +56,24 @@ public class UserServiceImpl implements UserService {
     public SmsHelpUser findById(Long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException("user not found"));
+    }
+
+    @Override
+    public SmsHelpUser updateUserPasswordByUserId(Long userId, String newPassword) {
+        SmsHelpUser user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("user not found"));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public SmsHelpUser updateUserStatusByUserId(Long userId, EntityStatus newStatus) {
+        SmsHelpUser user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("user not found"));
+        user.setEntityStatus(newStatus);
+        return userRepository.saveAndFlush(user);
     }
 }
