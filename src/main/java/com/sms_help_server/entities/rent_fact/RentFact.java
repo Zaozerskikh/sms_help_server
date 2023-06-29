@@ -20,7 +20,7 @@ public class RentFact extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rentFactId;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private RentFactStatus status;
 
     @Column(name = "rent_started")

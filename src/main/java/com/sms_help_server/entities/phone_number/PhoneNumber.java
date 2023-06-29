@@ -1,8 +1,9 @@
 package com.sms_help_server.entities.phone_number;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.rent_fact.RentFact;
-import com.sms_help_server.entities.service.Service;
+import com.sms_help_server.entities.service_number_relation.ServiceNumberRelation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,16 +21,26 @@ public class PhoneNumber extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long numberId;
 
-    @Column(name = "number")
+    @Column(name = "number", nullable = false, unique = true, updatable = false)
     private String number;
 
-    @Column(name = "country")
+    @Column(name = "country", nullable = false, updatable = false)
     private String country;
 
-    @ManyToMany(mappedBy = "availableNumbers", fetch = FetchType.LAZY)
-    private List<Service> availableServices;
+    @JsonIgnoreProperties({"phoneNumber", "service"})
+    @OneToMany(
+            mappedBy = "phoneNumber",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+    )
+    private List<ServiceNumberRelation> serviceNumberRelations;
 
-    @OneToMany(mappedBy = "number", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("number")
+    @OneToMany(
+            mappedBy = "number",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+    )
     private List<RentFact> rentFacts;
 
     public PhoneNumber(String number, String country) {

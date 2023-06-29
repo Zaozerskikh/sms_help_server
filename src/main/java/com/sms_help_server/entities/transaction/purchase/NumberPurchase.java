@@ -25,6 +25,10 @@ public class NumberPurchase extends Transaction {
     @JoinColumn(name = "service_id")
     private Service service;
 
-    @OneToOne(mappedBy = "numberPurchase", fetch = FetchType.LAZY)
+    @OneToOne(
+            mappedBy = "numberPurchase",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+    )
     private RentFact rentFact;
 }

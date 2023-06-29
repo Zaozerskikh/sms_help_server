@@ -44,7 +44,7 @@ public class SmsHelpUser extends BaseEntity {
     )
     private List<Role> roles;
 
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties("user_actions")
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
@@ -52,7 +52,7 @@ public class SmsHelpUser extends BaseEntity {
     )
     private List<NumberPurchase> numberPurchases;
 
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties("user_actions")
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,

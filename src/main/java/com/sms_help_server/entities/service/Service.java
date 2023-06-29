@@ -2,7 +2,7 @@ package com.sms_help_server.entities.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
-import com.sms_help_server.entities.phone_number.PhoneNumber;
+import com.sms_help_server.entities.service_number_relation.ServiceNumberRelation;
 import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,21 +21,26 @@ public class Service extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long serviceId;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Double price;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "services_numbers",
-            joinColumns = {@JoinColumn(name = "service_id", referencedColumnName = "service_id")},
-            inverseJoinColumns = {@JoinColumn(name = "number_id", referencedColumnName = "number_id")}
+    @JsonIgnoreProperties("service")
+    @OneToMany(
+            mappedBy = "service",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
     )
-    private List<PhoneNumber> availableNumbers;
+    private List<ServiceNumberRelation> serviceNumberRelations;
 
-    @JsonIgnoreProperties
-    @OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("service")
+    @OneToMany(
+            mappedBy = "service",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+    )
     private List<NumberPurchase> numberPurchases;
 
     public Service(String serviceName, Double price) {

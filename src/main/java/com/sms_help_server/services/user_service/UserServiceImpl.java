@@ -6,6 +6,7 @@ import com.sms_help_server.entities.user.SmsHelpUser;
 import com.sms_help_server.repo.RoleRepository;
 import com.sms_help_server.repo.UserRepository;
 import com.sms_help_server.security.exceptions.RegistrationException;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,23 +57,33 @@ public class UserServiceImpl implements UserService {
     public SmsHelpUser findById(Long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("user not found"));
+                .orElseThrow(() -> new NoSuchElementException("user_actions not found"));
     }
 
     @Override
-    public SmsHelpUser updateUserPasswordByUserId(Long userId, String newPassword) {
-        SmsHelpUser user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("user not found"));
+    public SmsHelpUser findByIdOrEmail(Long id, String email) {
+        if (id == null && email == null) {
+            throw new NoSuchElementException("neither id nor email was provided");
+        }
+
+        return  (id != null) ?
+                this.findById(id) :
+                this.findByEmail(email);
+    }
+
+    @SneakyThrows
+    @Override
+    public SmsHelpUser updateUserPassword(SmsHelpUser user, String newPassword) {
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new PasswordChangeException("old password equals to a new password.");
+        }
+
         user.setPassword(passwordEncoder.encode(newPassword));
         return userRepository.saveAndFlush(user);
     }
 
     @Override
-    public SmsHelpUser updateUserStatusByUserId(Long userId, EntityStatus newStatus) {
-        SmsHelpUser user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("user not found"));
+    public SmsHelpUser updateUserStatus(SmsHelpUser user, EntityStatus newStatus) {
         user.setEntityStatus(newStatus);
         return userRepository.saveAndFlush(user);
     }

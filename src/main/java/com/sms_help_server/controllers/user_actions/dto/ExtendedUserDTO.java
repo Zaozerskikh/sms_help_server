@@ -1,4 +1,4 @@
-package com.sms_help_server.controllers.user.dto;
+package com.sms_help_server.controllers.user_actions.dto;
 
 import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
 import com.sms_help_server.entities.transaction.top_up.TopUp;

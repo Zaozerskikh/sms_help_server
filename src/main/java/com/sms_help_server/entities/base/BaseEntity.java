@@ -17,10 +17,14 @@ public class BaseEntity {
     protected Date createdDate;
 
     @LastModifiedDate
-    @Column(name = "updated")
+    @Column(name = "updated", nullable = false)
     protected Date updatedDate;
 
-    @Column(name = "entity_status", columnDefinition = "varchar(32) default 'ACTIVE'")
+    @Column(
+            name = "entity_status",
+            columnDefinition = "varchar(32) default 'ACTIVE'",
+            nullable = false
+    )
     @Enumerated(EnumType.STRING)
     protected EntityStatus entityStatus = EntityStatus.ACTIVE;
 }

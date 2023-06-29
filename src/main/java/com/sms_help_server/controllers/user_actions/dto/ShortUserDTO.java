@@ -1,4 +1,4 @@
-package com.sms_help_server.controllers.user.dto;
+package com.sms_help_server.controllers.user_actions.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

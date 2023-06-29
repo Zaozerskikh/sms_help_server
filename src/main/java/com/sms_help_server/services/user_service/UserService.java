@@ -14,7 +14,9 @@ public interface UserService {
 
     SmsHelpUser findById(Long id);
 
-    SmsHelpUser updateUserPasswordByUserId(Long userId, String newPassword);
+    SmsHelpUser findByIdOrEmail(Long id, String email);
 
-    SmsHelpUser updateUserStatusByUserId(Long userId, EntityStatus newStatus);
+    SmsHelpUser updateUserPassword(SmsHelpUser user, String newPassword);
+
+    SmsHelpUser updateUserStatus(SmsHelpUser user, EntityStatus newStatus);
 }
