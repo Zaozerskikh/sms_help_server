@@ -1,8 +1,9 @@
-package com.sms_help_server.security.controllers;
+package com.sms_help_server.security.auth_controller;
 
 import com.sms_help_server.security.exceptions.JwtAuthentificationException;
 import com.sms_help_server.security.exceptions.RegistrationException;
 import lombok.extern.java.Log;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Log
+@Order(1)
 @RestControllerAdvice
 public class AuthAdviceController {
     @ExceptionHandler(JwtAuthentificationException.class)

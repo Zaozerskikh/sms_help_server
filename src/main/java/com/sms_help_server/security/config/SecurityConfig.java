@@ -20,8 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String USER_ENDPOINTS = "/api/v1/user/**";
     private static final String ANDMIN_ENDPOINTS = "/api/v1/admin/**";
-    private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
-    private static final String REGISTER_ENDPOINT = "/api/v1/auth/register";
+    private static final String AUTH_ENDPOINTS = "/api/v1/auth/**";
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -50,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(LOGIN_ENDPOINT, REGISTER_ENDPOINT).permitAll()
+                .antMatchers(AUTH_ENDPOINTS).permitAll()
                 .antMatchers(ANDMIN_ENDPOINTS).hasRole(RoleName.ROLE_ADMIN.getValue())
                 .antMatchers(USER_ENDPOINTS)
                     .access(

@@ -3,6 +3,7 @@ package com.sms_help_server.entities.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
+import com.sms_help_server.entities.password_reset_token.PasswordResetToken;
 import com.sms_help_server.entities.role.Role;
 import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
 import com.sms_help_server.entities.transaction.top_up.TopUp;
@@ -44,7 +45,7 @@ public class SmsHelpUser extends BaseEntity {
     )
     private List<Role> roles;
 
-    @JsonIgnoreProperties("user_actions")
+    @JsonIgnoreProperties("users")
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
@@ -52,13 +53,17 @@ public class SmsHelpUser extends BaseEntity {
     )
     private List<NumberPurchase> numberPurchases;
 
-    @JsonIgnoreProperties("user_actions")
+    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )
     private List<TopUp> topUps;
+
+    @JsonIgnoreProperties("user")
+    @OneToOne(mappedBy = "user")
+    private PasswordResetToken token;
 
     public SmsHelpUser(String username, String email, String password) {
         this.nickname = username;

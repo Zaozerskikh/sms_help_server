@@ -3,6 +3,7 @@ package com.sms_help_server.entities.service;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.service_number_relation.ServiceNumberRelation;
+import com.sms_help_server.entities.sms.Sms;
 import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,6 +43,14 @@ public class Service extends BaseEntity {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
     )
     private List<NumberPurchase> numberPurchases;
+
+    @JsonIgnoreProperties("service")
+    @OneToMany(
+            mappedBy = "service",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+    )
+    private List<Sms> recievedSms;
 
     public Service(String serviceName, Double price) {
         this.name = serviceName;

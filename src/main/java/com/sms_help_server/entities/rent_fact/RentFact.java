@@ -3,6 +3,7 @@ package com.sms_help_server.entities.rent_fact;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.phone_number.PhoneNumber;
+import com.sms_help_server.entities.sms.Sms;
 import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,4 +38,9 @@ public class RentFact extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "number_purchase_id")
     private NumberPurchase numberPurchase;
+
+    @JsonIgnoreProperties("rentFact")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sms_id")
+    private Sms sms;
 }
