@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(USER_ENDPOINTS)
                     .access(
                             "hasRole('" + RoleName.ROLE_ADMIN.getValue() + "') " +
-                            "or @userSecurity.validateUserId(authentication, request)"
+                            "or @userSecurity.valudateUser(authentication, request)"
                     )
                 .anyRequest().authenticated()
                 .and()

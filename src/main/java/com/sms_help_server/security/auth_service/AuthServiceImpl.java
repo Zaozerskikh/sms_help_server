@@ -13,14 +13,12 @@ import com.sms_help_server.services.email_service.EmailService;
 import com.sms_help_server.services.user_service.PasswordChangeException;
 import com.sms_help_server.services.user_service.PasswordResetException;
 import com.sms_help_server.services.user_service.UserService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -68,11 +66,10 @@ public class AuthServiceImpl implements AuthService {
             emailService.sendSuccessfullRegistrationMessage(registeredUser);
             return registeredUser;
         } catch (Exception e) {
-            throw new RegistrationException("Registration failed, contact support. Stack trace\n" + Arrays.toString(e.getStackTrace()));
+            throw new RegistrationException("Registration failed");
         }
     }
 
-    @SneakyThrows
     @Override
     public SmsHelpUser updateUserPassword(SmsHelpUser user, String newPassword) {
         if (passwordEncoder.matches(newPassword, user.getPassword())) {
@@ -86,9 +83,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String generatePasswordResetToken(SmsHelpUser user, String linkContext) {
         String token = UUID.randomUUID().toString();
-        if (user.getToken() != null) {
-            user.getToken().setToken(token);
-            passwordResetTokenRepository.save(user.getToken());
+        if (user.getPasswordResetToken() != null) {
+            user.getPasswordResetToken().setTokenValue(token);
+            passwordResetTokenRepository.save(user.getPasswordResetToken());
         } else {
             passwordResetTokenRepository.save(new PasswordResetToken(user, token));
         }
@@ -100,11 +97,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @SneakyThrows
     public SmsHelpUser resetUserPassword(String passwordResetToken, String newPassword) {
-        PasswordResetToken token = passwordResetTokenRepository.findByToken(passwordResetToken);
+        PasswordResetToken token = this.findAndCheckPasswordResetToken(passwordResetToken);
+        SmsHelpUser user =  this.updateUserPassword(token.getUser(), newPassword);
+        emailService.sendSuccessfullPasswordResetMessage(user);
+        return user;
+    }
 
-        if (token == null ) {
+    @Override
+    public PasswordResetToken findAndCheckPasswordResetToken(String passwordResetToken) {
+        PasswordResetToken token = passwordResetTokenRepository.findByTokenValue(passwordResetToken);
+
+        if (token == null) {
             throw new PasswordResetException("incorrect password reset link");
         }
 
@@ -112,8 +116,6 @@ public class AuthServiceImpl implements AuthService {
             throw new PasswordResetException("password reset link was expired");
         }
 
-        SmsHelpUser user =  this.updateUserPassword(token.getUser(), newPassword);
-        emailService.sendSuccessfullPasswordResetMessage(user);
-        return user;
+        return token;
     }
 }

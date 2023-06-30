@@ -64,11 +64,13 @@ public class AuthController {
     public ResponseEntity<String> resetPassword(
             @PathVariable String token,
             @RequestBody NewPasswordDTO newPasswordDTO) {
-        try {
-            authService.resetUserPassword(token, newPasswordDTO.getNewPassword());
-            return ResponseEntity.ok("Your password has been successfully updated");
-        } catch (Exception e) {
-            throw new JwtAuthentificationException(e.getMessage());
-        }
+        authService.resetUserPassword(token, newPasswordDTO.getNewPassword());
+        return ResponseEntity.ok("Your password has been successfully updated");
+    }
+
+    @GetMapping("/checkResetPasswordToken/{token}")
+    public ResponseEntity<String> checkResetPasswordToken(@PathVariable String token) {
+        authService.findAndCheckPasswordResetToken(token);
+        return ResponseEntity.ok("token is valid");
     }
 }

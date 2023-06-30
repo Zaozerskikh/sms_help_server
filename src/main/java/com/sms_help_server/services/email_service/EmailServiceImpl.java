@@ -1,7 +1,6 @@
 package com.sms_help_server.services.email_service;
 
 import com.sms_help_server.entities.user.SmsHelpUser;
-import com.sms_help_server.security.exceptions.RegistrationException;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +28,7 @@ public class EmailServiceImpl implements EmailService {
             sender.send(message);
             log.info("EMAIL SENT: " + message);
         } catch (Exception e) {
-            throw new RegistrationException("email not valid");
+            throw new EmailException(e.getMessage());
         }
     }
 

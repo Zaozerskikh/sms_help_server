@@ -1,5 +1,6 @@
 package com.sms_help_server.security.auth_service;
 
+import com.sms_help_server.entities.password_reset_token.PasswordResetToken;
 import com.sms_help_server.entities.user.SmsHelpUser;
 
 public interface AuthService {
@@ -12,4 +13,6 @@ public interface AuthService {
     SmsHelpUser resetUserPassword(String passwordResetToken, String newPassword);
 
     SmsHelpUser updateUserPassword(SmsHelpUser user, String newPassword);
+
+    PasswordResetToken findAndCheckPasswordResetToken(String passwordResetToken);
 }

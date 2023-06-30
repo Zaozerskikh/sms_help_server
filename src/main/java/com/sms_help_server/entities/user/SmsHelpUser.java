@@ -63,7 +63,7 @@ public class SmsHelpUser extends BaseEntity {
 
     @JsonIgnoreProperties("user")
     @OneToOne(mappedBy = "user")
-    private PasswordResetToken token;
+    private PasswordResetToken passwordResetToken;
 
     public SmsHelpUser(String username, String email, String password) {
         this.nickname = username;

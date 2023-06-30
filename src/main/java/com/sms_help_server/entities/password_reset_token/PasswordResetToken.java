@@ -16,13 +16,15 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 public class PasswordResetToken extends BaseEntity {
+    private static final Long EXPIRATION = 604800000L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "password_reset_token_id")
     private Long passwordResetTokenId;
 
     @Column(name = "token", nullable = false, updatable = true, unique = true)
-    private String token;
+    private String tokenValue;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "user_id")
@@ -34,11 +36,11 @@ public class PasswordResetToken extends BaseEntity {
     @PrePersist
     @PreUpdate
     void setExpirationDate() {
-        expirationDate = new Date(createdDate.getTime() + 604800000);
+        expirationDate = new Date(createdDate.getTime() + EXPIRATION);
     }
 
-    public PasswordResetToken(SmsHelpUser user, String token) {
+    public PasswordResetToken(SmsHelpUser user, String tokenValue) {
         this.user = user;
-        this.token = token;
+        this.tokenValue = tokenValue;
     }
 }

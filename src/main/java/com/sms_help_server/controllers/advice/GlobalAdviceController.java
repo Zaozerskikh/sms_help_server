@@ -1,5 +1,6 @@
 package com.sms_help_server.controllers.advice;
 
+import com.sms_help_server.services.email_service.EmailException;
 import lombok.extern.java.Log;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -22,6 +23,12 @@ public class GlobalAdviceController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleException(HttpMessageNotReadableException exception) {
         log.info("HTTP MESSAGE NOT READABLE: " + exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<String> handleEmailException(EmailException exception) {
+        log.info("EMAIL EXCEPTION: " + exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 }
