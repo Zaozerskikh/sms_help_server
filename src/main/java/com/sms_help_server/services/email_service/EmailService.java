@@ -5,7 +5,7 @@ import com.sms_help_server.entities.user.SmsHelpUser;
 public interface EmailService {
      void sendMessage(String targetEmail, String subject, String text);
 
-     void sendSuccessfullRegistrationMessage(SmsHelpUser registeredUser);
+     void sendVerificationMessage(SmsHelpUser registeredUser, String link);
 
      void sendPasswordResetLinkMessage(SmsHelpUser user, String resetPasswordLink);
 

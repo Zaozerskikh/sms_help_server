@@ -33,11 +33,14 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendSuccessfullRegistrationMessage(SmsHelpUser registeredUser) {
+    public void sendVerificationMessage(SmsHelpUser registeredUser, String link) {
         this.sendMessage(
                 registeredUser.getEmail(),
-                "Registration completed",
-                "Dear " + registeredUser.getNickname() + ", you have been successfully registered on sms.help service!"
+                "Sms.help account verification",
+                "Dear " + registeredUser.getNickname() + "!" +
+                        "\nYou have been successfully registered on sms.help service!" +
+                        "\nTo verify your account click on the link below:" +
+                        "\n" + link
         );
     }
 

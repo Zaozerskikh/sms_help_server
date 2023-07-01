@@ -41,13 +41,10 @@ public class AuthController {
             SmsHelpUser user = userService.findByEmail(registrationRequestDto.getEmail());
             throw new RegistrationException("User already registered");
         } catch (UsernameNotFoundException e) {
+            String nickname = registrationRequestDto.getNickname();
             String email = registrationRequestDto.getEmail();
             String password = registrationRequestDto.getPassword();
-            authService.register(new SmsHelpUser(
-                    registrationRequestDto.getNickname(),
-                    email,
-                    password
-            ));
+            authService.register(nickname, email, password);
             return ResponseEntity.ok(new JwtResponseDTO(authService.authentificate(email, password)));
         }
     }
@@ -56,7 +53,7 @@ public class AuthController {
     public ResponseEntity<String> getResetPasswordToken(
             @RequestParam(required = true) String email) {
         SmsHelpUser user = userService.findByEmail(email);
-        authService.generatePasswordResetToken(user, "http://localhost:8080");
+        authService.generatePasswordResetToken(user);
         return ResponseEntity.ok("Password reset link was sent to your email address.");
     }
 
@@ -72,5 +69,11 @@ public class AuthController {
     public ResponseEntity<String> checkResetPasswordToken(@PathVariable String token) {
         authService.findAndCheckPasswordResetToken(token);
         return ResponseEntity.ok("token is valid");
+    }
+
+    @PatchMapping("/verify/{token}")
+    public ResponseEntity<String> verifyAccount(@PathVariable String token) {
+        authService.verifyUser(token);
+        return ResponseEntity.ok("Your password has been successfully updated");
     }
 }

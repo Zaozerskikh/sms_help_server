@@ -1,18 +1,17 @@
 package com.sms_help_server.entities.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sms_help_server.entities.base.BaseEntity;
-import com.sms_help_server.entities.password_reset_token.PasswordResetToken;
 import com.sms_help_server.entities.role.Role;
+import com.sms_help_server.entities.tokens.password_reset_token.PasswordResetToken;
+import com.sms_help_server.entities.tokens.verification_token.VerificationToken;
 import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
 import com.sms_help_server.entities.transaction.top_up.TopUp;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.sms_help_server.entities.user_password.UserPassword;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -30,12 +29,19 @@ public class SmsHelpUser extends BaseEntity {
     @Column(name = "email", unique = true)
     private String email;
 
-    @JsonIgnore
-    @Column(name = "password")
-    private String password;
-
     @Column(name = "balance")
     private double balance = 0;
+
+    @Column(name = "is_verified", columnDefinition = "boolean default false")
+    private Boolean isVerified;
+
+    @JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
+    )
+    private Set<UserPassword> passwordHistory;
 
     @JsonIgnoreProperties("users")
     @ManyToMany(fetch = FetchType.EAGER)
@@ -45,7 +51,7 @@ public class SmsHelpUser extends BaseEntity {
     )
     private List<Role> roles;
 
-    @JsonIgnoreProperties("users")
+    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
@@ -62,12 +68,35 @@ public class SmsHelpUser extends BaseEntity {
     private List<TopUp> topUps;
 
     @JsonIgnoreProperties("user")
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private PasswordResetToken passwordResetToken;
 
+    @JsonIgnoreProperties("user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private VerificationToken verificationToken;
+
+    public void setPassword(String password) {
+        passwordHistory.add(new UserPassword(this, password));
+    }
+
+    public String getPassword() {
+        return this.passwordHistory
+                .stream()
+                .sorted(Comparator.comparing(BaseEntity::getCreatedDate).reversed())
+                .toList()
+                .get(0)
+                .getPassword();
+    }
+
     public SmsHelpUser(String username, String email, String password) {
+        this.passwordHistory = new HashSet<>();
+        this.topUps = new ArrayList<>();
+        this.numberPurchases = new ArrayList<>();
+        this.roles = new ArrayList<>();
+
         this.nickname = username;
-        this.password = password;
+        this.passwordHistory.add(new UserPassword(this, password));
         this.email = email;
+        this.isVerified = false;
     }
 }

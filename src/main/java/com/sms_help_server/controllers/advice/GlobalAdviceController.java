@@ -1,5 +1,6 @@
 package com.sms_help_server.controllers.advice;
 
+import com.sms_help_server.controllers.advice.dto.HttpExceptionDTO;
 import com.sms_help_server.services.email_service.EmailException;
 import lombok.extern.java.Log;
 import org.springframework.core.Ordered;
@@ -15,9 +16,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class GlobalAdviceController {
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception exception) {
+    public ResponseEntity<HttpExceptionDTO> handleException(Exception exception) {
         log.info("INTERNAL SERVER ERROR: " + exception.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new HttpExceptionDTO(
+                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        exception.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(HttpException.class)
+    public ResponseEntity<HttpExceptionDTO> handleHttpException(HttpException exception) {
+        log.info("HTTP " + exception.getStatus().value() + " : " + exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new HttpExceptionDTO(exception));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

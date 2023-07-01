@@ -58,4 +58,12 @@ public class UserActionsUserController {
         SmsHelpUser user = userService.findByIdOrEmail(userId, email);
         return ResponseEntity.ok(authService.updateUserPassword(user, newPasswordDTO.getNewPassword()));
     }
+
+    @GetMapping("/requestNewVerificationLink")
+    public ResponseEntity<String> requestNewVerificationLink(
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) String email) {
+        authService.generateNewVerificationToken(userService.findByIdOrEmail(userId, email));
+        return ResponseEntity.ok("generated");
+    }
 }

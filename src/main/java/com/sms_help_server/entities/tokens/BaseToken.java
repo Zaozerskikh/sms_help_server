@@ -1,4 +1,4 @@
-package com.sms_help_server.entities.password_reset_token;
+package com.sms_help_server.entities.tokens;
 
 import com.sms_help_server.entities.base.BaseEntity;
 import com.sms_help_server.entities.user.SmsHelpUser;
@@ -12,26 +12,21 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@Entity(name = "password_reset_token")
+@MappedSuperclass
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
-public class PasswordResetToken extends BaseEntity {
-    private static final Long EXPIRATION = 604800000L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "password_reset_token_id")
-    private Long passwordResetTokenId;
+public class BaseToken extends BaseEntity {
+    protected static final Long EXPIRATION = 604800000L;
 
     @Column(name = "token", nullable = false, updatable = true, unique = true)
-    private String tokenValue;
+    protected String tokenValue;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "user_id")
-    private SmsHelpUser user;
+    protected SmsHelpUser user;
 
     @Column(name = "expiration_date", updatable = true)
-    private Date expirationDate;
+    protected Date expirationDate;
 
     @PrePersist
     @PreUpdate
@@ -39,7 +34,7 @@ public class PasswordResetToken extends BaseEntity {
         expirationDate = new Date(createdDate.getTime() + EXPIRATION);
     }
 
-    public PasswordResetToken(SmsHelpUser user, String tokenValue) {
+    public BaseToken(SmsHelpUser user, String tokenValue) {
         this.user = user;
         this.tokenValue = tokenValue;
     }
