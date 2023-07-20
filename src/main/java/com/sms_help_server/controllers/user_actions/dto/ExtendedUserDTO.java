@@ -14,7 +14,8 @@ public class ExtendedUserDTO {
     private Long id;
     private Date registrationDate;
     private String email;
-    private String nickname;
+    private String username;
+    private Double balance;
     private List<TopUp> topUps;
     private List<NumberPurchase> purchases;
 }

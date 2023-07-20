@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class JwtResponseDTO {
     private final String token;
+    private final Long userId;
 }

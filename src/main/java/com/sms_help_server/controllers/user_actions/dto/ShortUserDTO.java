@@ -8,5 +8,6 @@ import lombok.Data;
 public class ShortUserDTO {
     private Long id;
     private String email;
-    private String nickname;
+    private String username;
+    private Double balance;
 }

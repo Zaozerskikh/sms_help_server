@@ -83,7 +83,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            throw new JwtAuthentificationException();
+            throw new JwtAuthentificationException(e.getMessage());
         }
     }
 

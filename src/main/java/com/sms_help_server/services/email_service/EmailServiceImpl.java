@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Log
@@ -32,6 +33,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Async
     @Override
     public void sendVerificationMessage(SmsHelpUser registeredUser, String link) {
         this.sendMessage(
@@ -44,21 +46,23 @@ public class EmailServiceImpl implements EmailService {
         );
     }
 
+    @Async
     @Override
     public void sendPasswordResetLinkMessage(SmsHelpUser user, String resetPasswordLink) {
         this.sendMessage(
                 user.getEmail(),
                 "Password reset",
-                "Dear " + user.getNickname() + ", your password reset link: " + resetPasswordLink
+                "Dear " + user.getNickname() + ", your sms.help password reset link: " + resetPasswordLink
         );
     }
 
+    @Async
     @Override
     public void sendSuccessfullPasswordResetMessage(SmsHelpUser user) {
         this.sendMessage(
                 user.getEmail(),
                 "Password reset",
-                "Dear " + user.getNickname() + ", your password has been successfully changed."
+                "Dear " + user.getNickname() + ", your sms.help password has been successfully changed."
         );
     }
 }

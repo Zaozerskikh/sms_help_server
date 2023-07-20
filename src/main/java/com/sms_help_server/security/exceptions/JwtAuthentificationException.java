@@ -1,17 +1,10 @@
 package com.sms_help_server.security.exceptions;
 
-import org.springframework.security.core.AuthenticationException;
+import com.sms_help_server.controllers.advice.HttpException;
+import org.springframework.http.HttpStatus;
 
-public class JwtAuthentificationException extends AuthenticationException {
-    public JwtAuthentificationException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
-
-    public JwtAuthentificationException(String msg) {
-        super(msg);
-    }
-
-    public JwtAuthentificationException() {
-        super("403");
+public class JwtAuthentificationException extends HttpException {
+    public JwtAuthentificationException(String message) {
+        super(HttpStatus.UNAUTHORIZED, message);
     }
 }

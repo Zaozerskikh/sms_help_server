@@ -11,6 +11,9 @@ import com.sms_help_server.entities.user_password.UserPassword;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Data
@@ -23,9 +26,11 @@ public class SmsHelpUser extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long userId;
 
-    @Column(name = "nickname")
+    @Size(min = 3, max = 20)
+    @Column(name = "nickname", unique = true)
     private String nickname;
 
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
     @Column(name = "email", unique = true)
     private String email;
 
