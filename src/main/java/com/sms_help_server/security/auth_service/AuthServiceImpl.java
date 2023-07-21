@@ -19,6 +19,7 @@ import com.sms_help_server.services.user_service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -82,8 +83,9 @@ public class AuthServiceImpl implements AuthService {
             SmsHelpUser registeredUser = userRepository.saveAndFlush(user);
 
             String verificationToken = this.generateNewVerificationToken(registeredUser);
-            String verificationLink = frontendHost + "/api/v1/auth/verify/" + verificationToken;
+            String verificationLink = frontendHost + frontendVerificationLinkPrefix + verificationToken;
             emailService.sendVerificationMessage(registeredUser, verificationLink);
+
             return registeredUser;
         } catch (Exception e) {
             throw new RegistrationException(e.getMessage());
@@ -154,8 +156,12 @@ public class AuthServiceImpl implements AuthService {
 
         SmsHelpUser user = token.getUser();
         user.setIsVerified(true);
+
         SmsHelpUser verifiedUser = userRepository.saveAndFlush(user);
-        verificationTokenRepository.delete(token);
+        try {
+            verificationTokenRepository.deleteById(token.getVerificationTokenId());
+        } catch (ObjectOptimisticLockingFailureException ignored) { }
+
         return verifiedUser;
     }
 
@@ -173,8 +179,6 @@ public class AuthServiceImpl implements AuthService {
             verificationTokenRepository.save(new VerificationToken(user, tokenValue));
         }
 
-        String verificationLink = frontendHost + frontendVerificationLinkPrefix + tokenValue;
-        emailService.sendVerificationMessage(user, verificationLink);
         return tokenValue;
     }
 }
