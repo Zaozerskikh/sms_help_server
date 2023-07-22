@@ -10,4 +10,8 @@ import lombok.NoArgsConstructor;
 public class LoginRequestDTO {
     private String email;
     private String password;
+
+    public void setEmail(String email) {
+        this.email = email.toLowerCase();
+    }
 }

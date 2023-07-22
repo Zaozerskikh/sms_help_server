@@ -25,4 +25,8 @@ public class RegistrationRequestDTO {
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$@!%&*?])[A-Za-z\\d#$@!%&*?]{8,20}$",
             message = "Incorrect password")
     private String password;
+
+    public void setEmail(String email) {
+        this.email = email.toLowerCase();
+    }
 }
