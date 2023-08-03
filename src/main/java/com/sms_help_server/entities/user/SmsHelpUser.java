@@ -104,4 +104,9 @@ public class SmsHelpUser extends BaseEntity {
         this.email = email;
         this.isVerified = false;
     }
+
+    public double increaseBalance(double amount) {
+        this.balance += amount;
+        return this.balance;
+    }
 }

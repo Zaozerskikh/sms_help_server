@@ -8,23 +8,27 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component("userSecurity")
 public class UserSecurityConstraint {
-    public boolean valudateUser(Authentication authentication, HttpServletRequest request) {
-        JwtUser jwtUser =  (JwtUser)authentication.getPrincipal();
-        Object rawUserId = request.getParameter("userId");
-        String userEmail = request.getParameter("email");
+    public boolean validateUserByRequestParam(Authentication authentication, HttpServletRequest request) {
+        try {
+            JwtUser jwtUser =  (JwtUser)authentication.getPrincipal();
+            Object rawUserId = request.getParameter("userId");
+            String userEmail = request.getParameter("email");
 
-        if (rawUserId == null && userEmail == null) {
-            return false;
-        }
-
-        if (userEmail == null) {
-            try {
-                return jwtUser.getId().equals(Long.parseLong(rawUserId.toString()));
-            } catch (Exception e) {
+            if (rawUserId == null && userEmail == null) {
                 return false;
             }
-        } else {
-            return jwtUser.getEmail().equals(userEmail);
+
+            if (userEmail == null) {
+                try {
+                    return jwtUser.getId().equals(Long.parseLong(rawUserId.toString()));
+                } catch (Exception e) {
+                    return false;
+                }
+            } else {
+                return jwtUser.getEmail().equals(userEmail);
+            }
+        } catch (Exception e) {
+            return false;
         }
     }
 }
