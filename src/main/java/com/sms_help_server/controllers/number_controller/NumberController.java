@@ -28,7 +28,7 @@ public class NumberController {
         return ResponseEntity.ok(
                 new SmsPvaNumberRentResponseDTO(
                         purchase.getCountryCode().toString() + purchase.getNumber(),
-                        purchase.getPurchaseId()
+                        purchase.getPurchaseId(), purchase.getUser().getBalance()
                 )
         );
     }

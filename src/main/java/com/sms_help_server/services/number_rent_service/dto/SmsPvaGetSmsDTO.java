@@ -6,5 +6,5 @@ import lombok.Data;
 public class SmsPvaGetSmsDTO {
     private String number;
     private int response;
-    private String code;
+    private String sms;
 }

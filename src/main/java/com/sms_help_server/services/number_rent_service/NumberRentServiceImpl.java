@@ -57,6 +57,7 @@ public class NumberRentServiceImpl implements NumberRentService {
 
     @Override
     public SmsPvaNumberPurchase rentSmsPvaNumber(String serviceCode, Long userId) {
+//        return smsPvaPurchaseRepository.findById(61L).orElseThrow();
         SmsHelpUser user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
@@ -152,8 +153,8 @@ public class NumberRentServiceImpl implements NumberRentService {
         }
         log.info(codeInfo.toString());
 
-        if (codeInfo.getResponse() == 1 && codeInfo.getCode() != null) {
-            purchase.setCode(codeInfo.getCode());
+        if (codeInfo.getResponse() == 1 && codeInfo.getSms() != null) {
+            purchase.setCode(codeInfo.getSms());
             return this.smsPvaPurchaseRepository.saveAndFlush(purchase);
         }
         return purchase;

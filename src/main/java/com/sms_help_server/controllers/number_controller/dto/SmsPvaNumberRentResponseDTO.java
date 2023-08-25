@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class SmsPvaNumberRentResponseDTO {
     private String number;
     private Long rentFactId;
+    private Double balanceAfterPurchase;
 }
