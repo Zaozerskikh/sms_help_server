@@ -5,7 +5,7 @@ import com.sms_help_server.controllers.user_actions.dto.ChangePasswordRequestDTO
 import com.sms_help_server.controllers.user_actions.dto.ExtendedUserDTO;
 import com.sms_help_server.controllers.user_actions.dto.ShortUserDTO;
 import com.sms_help_server.controllers.user_actions.dto.UserBalanceDTO;
-import com.sms_help_server.entities.user.SmsHelpUser;
+import com.sms_help_server.entities.user.user_entity.SmsHelpUser;
 import com.sms_help_server.security.auth_service.AuthService;
 import com.sms_help_server.services.user_service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,7 @@ public class UserActionsUserController {
                         user.getEmail(),
                         user.getNickname(),
                         user.getBalance(),
-                        user.getTopUps(),
-                        user.getNumberPurchases()
+                        user.getCoibaseTopUps()
                 )
         );
     }

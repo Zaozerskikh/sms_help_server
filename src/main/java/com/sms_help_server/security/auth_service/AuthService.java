@@ -1,7 +1,7 @@
 package com.sms_help_server.security.auth_service;
 
 import com.sms_help_server.entities.tokens.password_reset_token.PasswordResetToken;
-import com.sms_help_server.entities.user.SmsHelpUser;
+import com.sms_help_server.entities.user.user_entity.SmsHelpUser;
 
 public interface AuthService {
     SmsHelpUser register(String nickname, String email, String password);

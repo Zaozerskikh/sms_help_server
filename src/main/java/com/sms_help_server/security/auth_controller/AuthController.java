@@ -1,7 +1,7 @@
 package com.sms_help_server.security.auth_controller;
 
 import com.sms_help_server.controllers.BaseResponseDTO;
-import com.sms_help_server.entities.user.SmsHelpUser;
+import com.sms_help_server.entities.user.user_entity.SmsHelpUser;
 import com.sms_help_server.security.auth_service.AuthService;
 import com.sms_help_server.security.dto.JwtResponseDTO;
 import com.sms_help_server.security.dto.LoginRequestDTO;

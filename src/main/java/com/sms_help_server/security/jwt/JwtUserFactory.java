@@ -2,7 +2,7 @@ package com.sms_help_server.security.jwt;
 
 import com.sms_help_server.entities.base.EntityStatus;
 import com.sms_help_server.entities.role.Role;
-import com.sms_help_server.entities.user.SmsHelpUser;
+import com.sms_help_server.entities.user.user_entity.SmsHelpUser;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

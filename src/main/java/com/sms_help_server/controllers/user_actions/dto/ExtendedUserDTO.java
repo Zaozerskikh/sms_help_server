@@ -1,7 +1,6 @@
 package com.sms_help_server.controllers.user_actions.dto;
 
-import com.sms_help_server.entities.transaction.purchase.NumberPurchase;
-import com.sms_help_server.entities.transaction.top_up.TopUp;
+import com.sms_help_server.entities.transaction.coinbase_top_up.CoinbaseCharge;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -16,6 +15,5 @@ public class ExtendedUserDTO {
     private String email;
     private String username;
     private Double balance;
-    private List<TopUp> topUps;
-    private List<NumberPurchase> purchases;
+    private List<CoinbaseCharge> coinbaseTopUps;
 }

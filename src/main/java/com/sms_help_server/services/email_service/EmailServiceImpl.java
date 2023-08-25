@@ -1,6 +1,6 @@
 package com.sms_help_server.services.email_service;
 
-import com.sms_help_server.entities.user.SmsHelpUser;
+import com.sms_help_server.entities.user.user_entity.SmsHelpUser;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

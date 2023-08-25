@@ -1,7 +1,7 @@
 package com.sms_help_server.controllers.admin_actions;
 
 import com.sms_help_server.entities.base.EntityStatus;
-import com.sms_help_server.entities.user.SmsHelpUser;
+import com.sms_help_server.entities.user.user_entity.SmsHelpUser;
 import com.sms_help_server.services.user_service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

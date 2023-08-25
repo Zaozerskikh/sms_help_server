@@ -4,7 +4,7 @@ import com.sms_help_server.entities.base.EntityStatus;
 import com.sms_help_server.entities.role.RoleName;
 import com.sms_help_server.entities.tokens.password_reset_token.PasswordResetToken;
 import com.sms_help_server.entities.tokens.verification_token.VerificationToken;
-import com.sms_help_server.entities.user.SmsHelpUser;
+import com.sms_help_server.entities.user.user_entity.SmsHelpUser;
 import com.sms_help_server.repo.PasswordResetTokenRepository;
 import com.sms_help_server.repo.RoleRepository;
 import com.sms_help_server.repo.UserRepository;

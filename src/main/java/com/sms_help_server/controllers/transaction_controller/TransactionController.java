@@ -4,7 +4,7 @@ import com.sms_help_server.controllers.advice.HttpException;
 import com.sms_help_server.controllers.transaction_controller.dto.CoinbaseChargeCreationDTO;
 import com.sms_help_server.controllers.transaction_controller.dto.CoinbaseChargeDto;
 import com.sms_help_server.controllers.transaction_controller.dto.CoinbaseChargeStatusDTO;
-import com.sms_help_server.entities.transaction.crypto_top_up.CoinbaseCharge;
+import com.sms_help_server.entities.transaction.coinbase_top_up.CoinbaseCharge;
 import com.sms_help_server.services.transaction_service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping("/create")
-    public ResponseEntity<CoinbaseChargeDto> createCharge(
+    public ResponseEntity<CoinbaseChargeDto> createCoinbaseCharge(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) String email,
             @RequestBody CoinbaseChargeCreationDTO chargeCreationDto) {
@@ -46,7 +46,7 @@ public class TransactionController {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<CoinbaseChargeStatusDTO> refreshCharge(
+    public ResponseEntity<CoinbaseChargeStatusDTO> refreshCoinbaseCharge(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) String email,
             @RequestParam String chargeId) {

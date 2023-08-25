@@ -22,6 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String ANDMIN_ENDPOINTS = "/api/v1/admin/**";
     private static final String AUTH_ENDPOINTS = "/api/v1/auth/**";
     private static final String TRANSACTIONS_ENDPOINTS = "/api/v1/transactions/**";
+    private static final String NUMBER_RENT_ENDPOINTS = "/api/v1/numbers/**";
+    private static final String INFO_ENDPOINTS = "/api/v1/info/**";
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -52,9 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(AUTH_ENDPOINTS).permitAll()
+                .antMatchers(AUTH_ENDPOINTS, INFO_ENDPOINTS).permitAll()
                 .antMatchers(ANDMIN_ENDPOINTS).hasRole(RoleName.ROLE_ADMIN.getValue())
-                .antMatchers(USER_ENDPOINTS, TRANSACTIONS_ENDPOINTS)
+                .antMatchers(USER_ENDPOINTS, TRANSACTIONS_ENDPOINTS, NUMBER_RENT_ENDPOINTS)
                     .access(
                             "hasRole('" + RoleName.ROLE_ADMIN.getValue() + "') " +
                             "or @userSecurity.validateUserByRequestParam(authentication, request)"
